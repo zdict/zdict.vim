@@ -11,21 +11,22 @@ function! zdict#initialize_window () " {{{
         vnew
         let s:zdict_winnr = winnr()
     else
-        execute s:zdict_winnr .'wincmd w'
-        normal! ggdG
+        execute 'silent '. s:zdict_winnr .'wincmd w'
+        silent 1,$delete _
     endif
-    execute "normal! \<C-w>L"
+    execute "silent normal! \<C-w>L"
     vertical resize 50
-    set ft=zdict
+    setlocal ft=zdict
 endfunction " }}}
 
 function zdict#_query (word) " {{{
-    execute 'r !zdict '. a:word
+    execute 'setlocal statusline=[zdict]\ '. a:word
+    execute 'silent r !zdict '. a:word
 endfunction " }}}
 
 function! zdict#post_query () " {{{
     call zdict#normalize_color_code()
-    normal! ggdd
+    silent 1,1delete _
     execute "normal! \<C-w>\<C-w>"
 endfunction " }}}
 
@@ -65,6 +66,7 @@ function! zdict#normalize_color_code () " {{{
 endfunction " }}}
 
 function! zdict#query ()
+    echo "Querying ..."
     let l:word = zdict#get_word()
     call zdict#initialize_window()
     call zdict#_query(l:word)
