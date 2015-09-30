@@ -1,4 +1,4 @@
-function! zdict#get_word () " {{{
+function! s:get_word () " {{{
     let l:row = line('.')
     let l:col = col('.')
     normal! "zyiw
@@ -6,7 +6,7 @@ function! zdict#get_word () " {{{
     return @z
 endfunction " }}}
 
-function! zdict#initialize_window () " {{{
+function! s:initialize_window () " {{{
     if !exists('s:zdict_winnr') || winheight(s:zdict_winnr) == -1
         vnew
         let s:zdict_winnr = winnr()
@@ -19,18 +19,18 @@ function! zdict#initialize_window () " {{{
     setlocal ft=zdict
 endfunction " }}}
 
-function zdict#_query (word) " {{{
+function s:query (word) " {{{
     execute 'setlocal statusline=[zdict]\ '. a:word
     execute 'silent r !zdict '. a:word
 endfunction " }}}
 
-function! zdict#post_query () " {{{
-    call zdict#normalize_color_code()
+function! s:post_query () " {{{
+    call s:normalize_color_code()
     silent 1,1delete _
     execute "normal! \<C-w>\<C-w>"
 endfunction " }}}
 
-function! zdict#normalize_color_code () " {{{
+function! s:normalize_color_code () " {{{
     " Dark colors
     silent! %s/\v\[30m/[bb;/g " black
     silent! %s/\v\[31m/[rb;/g " red
@@ -67,8 +67,8 @@ endfunction " }}}
 
 function! zdict#query ()
     echo "Querying ..."
-    let l:word = zdict#get_word()
-    call zdict#initialize_window()
-    call zdict#_query(l:word)
-    call zdict#post_query()
+    let l:word = s:get_word()
+    call s:initialize_window()
+    call s:query(l:word)
+    call s:post_query()
 endfunction
