@@ -1,10 +1,19 @@
 function! zdict#get_word () " {{{
+    let l:row = line('.')
+    let l:col = col('.')
     normal! "zyiw
+    call cursor(l:row, l:col)
     return @z
 endfunction " }}}
 
 function! zdict#initialize_window () " {{{
-    vnew
+    if !exists('s:zdict_winnr') || winheight(s:zdict_winnr) == -1
+        vnew
+        let s:zdict_winnr = winnr()
+    else
+        execute s:zdict_winnr .'wincmd w'
+        normal! ggdG
+    endif
     execute "normal! \<C-w>L"
     vertical resize 50
     set ft=zdict
