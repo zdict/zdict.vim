@@ -6,12 +6,23 @@ function! s:get_word () " {{{
     return @z
 endfunction " }}}
 
+function! s:get_zdict_window_id () " {{{
+    let l:tabnr = tabpagenr()
+    for winnr in range(1, tabpagewinnr(l:tabnr, '$'))
+        if gettabwinvar(tabnr, winnr, 'id') is 'zdict'
+            return winnr
+        endif
+    endfor
+    return 0
+endfunction " }}}
+
 function! s:initialize_window () " {{{
-    if !exists('s:zdict_winnr') || winheight(s:zdict_winnr) == -1
+    let l:winnr = s:get_zdict_window_id()
+    if l:winnr == 0
         vnew
-        let s:zdict_winnr = winnr()
+        let w:id = 'zdict'
     else
-        execute 'silent '. s:zdict_winnr .'wincmd w'
+        execute 'silent '. l:winnr .'wincmd w'
         silent 1,$delete _
     endif
     execute "silent normal! \<C-w>L"
