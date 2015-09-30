@@ -19,7 +19,7 @@ function! s:initialize_window () " {{{
     setlocal ft=zdict
 endfunction " }}}
 
-function s:query (word) " {{{
+function! s:query (word) " {{{
     execute 'setlocal statusline=[zdict]\ '. a:word
     execute 'silent r !zdict '. a:word
 endfunction " }}}
