@@ -1,3 +1,8 @@
+function! zdict#get_word () " {{{
+    normal! "zyiw
+    return @z
+endfunction " }}}
+
 function! zdict#initialize_window () " {{{
     vnew
     execute "normal! \<C-w>L"
@@ -5,13 +10,13 @@ function! zdict#initialize_window () " {{{
     set ft=zdict
 endfunction " }}}
 
-function zdict#_query () " {{{
-    r !zdict hello
+function zdict#_query (word) " {{{
+    execute 'r !zdict '. a:word
 endfunction " }}}
 
 function! zdict#post_query () " {{{
-    normal! ggdd
     call zdict#normalize_color_code()
+    normal! ggdd
     execute "normal! \<C-w>\<C-w>"
 endfunction " }}}
 
@@ -51,7 +56,8 @@ function! zdict#normalize_color_code () " {{{
 endfunction " }}}
 
 function! zdict#query ()
+    let l:word = zdict#get_word()
     call zdict#initialize_window()
-    call zdict#_query()
+    call zdict#_query(l:word)
     call zdict#post_query()
 endfunction
