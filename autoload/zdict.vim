@@ -15,7 +15,7 @@ function! zdict#post_query () " {{{
     execute "normal! \<C-w>\<C-w>"
 endfunction " }}}
 
-function! zdict#normalize_color_code ()
+function! zdict#normalize_color_code () " {{{
     " Dark colors
     silent! %s/\v\[30m/[bb;/g " black
     silent! %s/\v\[31m/[rb;/g " red
@@ -48,7 +48,7 @@ function! zdict#normalize_color_code ()
 
     " remove useless closing color code on line start
     silent! %s/\v^([^]*)\[;/\1/g
-endfunction
+endfunction " }}}
 
 function! zdict#query ()
     call zdict#initialize_window()
