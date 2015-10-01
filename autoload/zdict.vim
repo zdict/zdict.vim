@@ -3,9 +3,19 @@ let s:last_queried_word = ''
 function! s:get_word () " {{{
     let l:row = line('.')
     let l:col = col('.')
-    normal! "zyiw
+    let l:mode = mode()
+
+    let l:old_z_reg = @z
+    if l:mode == 'n'
+        normal! "zyiw
+    elseif l:mode == 'v' || l:mode == 'V' || l:mode == ""
+        normal! "zy
+    endif
+    let l:word = @z
+    let @z = l:old_z_reg
+
     call cursor(l:row, l:col)
-    return @z
+    return l:word
 endfunction " }}}
 
 function! s:get_zdict_window_id () " {{{
@@ -33,8 +43,9 @@ function! s:initialize_window () " {{{
 endfunction " }}}
 
 function! s:query (word) " {{{
-    execute 'setlocal statusline=[zdict]\ '. a:word
-    execute 'silent r !zdict '. a:word
+    let l:word = substitute(a:word, ' ', '\\ ', '')
+    execute 'setlocal statusline=[zdict]\ '. l:word
+    execute "silent r !zdict '". a:word ."'"
 endfunction " }}}
 
 function! s:post_query () " {{{
@@ -92,7 +103,6 @@ function! zdict#close_zdict_window () " {{{
 endfunction " }}}
 
 function! zdict#query ()
-    echo 'Querying ...'
     let l:word = s:get_word()
     if s:get_zdict_window_id() == 0 || l:word !=? s:last_queried_word
         call s:initialize_window()
@@ -102,4 +112,9 @@ function! zdict#query ()
         call zdict#close_zdict_window()
     endif
     let s:last_queried_word = l:word
+endfunction
+
+function! zdict#query_visual ()
+    normal! gv
+    call zdict#query()
 endfunction
