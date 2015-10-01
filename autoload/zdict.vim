@@ -1,3 +1,5 @@
+let s:last_queried_word = ''
+
 function! s:get_word () " {{{
     let l:row = line('.')
     let l:col = col('.')
@@ -76,10 +78,28 @@ function! s:normalize_color_code () " {{{
     silent! %s/\v^([^]*)\[;/\1/g
 endfunction " }}}
 
+function! s:destroy_window () " {{{
+    let l:winnr = s:get_zdict_window_id()
+    if l:winnr != 0
+        execute 'silent '. l:winnr .'wincmd w'
+        q
+    endif
+endfunction " }}}
+
+function! zdict#close_zdict_window () " {{{
+    call s:destroy_window()
+    redraw!
+endfunction " }}}
+
 function! zdict#query ()
-    echo "Querying ..."
+    echo 'Querying ...'
     let l:word = s:get_word()
-    call s:initialize_window()
-    call s:query(l:word)
-    call s:post_query()
+    if s:get_zdict_window_id() == 0 || l:word !=? s:last_queried_word
+        call s:initialize_window()
+        call s:query(l:word)
+        call s:post_query()
+    else
+        call zdict#close_zdict_window()
+    endif
+    let s:last_queried_word = l:word
 endfunction
