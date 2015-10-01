@@ -105,6 +105,7 @@ endfunction " }}}
 function! zdict#query ()
     let l:word = s:get_word()
     if s:get_zdict_window_id() == 0 || l:word !=? s:last_queried_word
+        echo 'Querying ...'
         call s:initialize_window()
         call s:query(l:word)
         call s:post_query()
