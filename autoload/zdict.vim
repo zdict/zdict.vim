@@ -7,9 +7,9 @@ function! s:get_word () " {{{
 
     let l:old_z_reg = @z
     if l:mode == 'n'
-        normal! "zyiw
+        silent normal! "zyiw
     elseif l:mode == 'v' || l:mode == 'V' || l:mode == ""
-        normal! "zy
+        silent normal! "zy
     endif
     let l:word = @z
     let @z = l:old_z_reg
@@ -43,9 +43,11 @@ function! s:initialize_window () " {{{
 endfunction " }}}
 
 function! s:query (word) " {{{
-    let l:word = substitute(a:word, ' ', '\\ ', 'g')
-    execute 'setlocal statusline=[zdict]\ '. l:word
-    execute "silent r !zdict '". a:word ."'"
+    let l:trimed_word = substitute(a:word, '\v[ \n\r]*$', '', '')
+    let l:trimed_word = substitute(l:trimed_word, '\v[\n\r]', ' ', 'g')
+    let l:statsline_word = substitute(l:trimed_word, '\v[ \n\r]', '\\ ', 'g')
+    execute 'setlocal statusline=[zdict]\ '. l:statsline_word
+    execute "silent r !zdict '". l:trimed_word ."'"
 endfunction " }}}
 
 function! s:post_query () " {{{
@@ -115,7 +117,7 @@ function! zdict#query ()
     let s:last_queried_word = l:word
 endfunction
 
-function! zdict#query_visual ()
+function! zdict#query_visual () range
     normal! gv
     call zdict#query()
 endfunction
