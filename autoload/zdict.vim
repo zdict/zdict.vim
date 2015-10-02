@@ -105,6 +105,11 @@ function! zdict#close_zdict_window () " {{{
 endfunction " }}}
 
 function! zdict#query ()
+    if !executable('zdict')
+        echo 'zdict is not installed, please install it first!'
+        echo 'Please refer to https://github.com/M157q/zdict.git'
+        return
+    endif
     let l:word = s:get_word()
     if s:get_zdict_window_id() == 0 || l:word !=? s:last_queried_word
         echo 'Querying ...'
