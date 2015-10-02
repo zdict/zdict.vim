@@ -43,7 +43,7 @@ function! s:initialize_window () " {{{
 endfunction " }}}
 
 function! s:query (word) " {{{
-    let l:word = substitute(a:word, ' ', '\\ ', '')
+    let l:word = substitute(a:word, ' ', '\\ ', 'g')
     execute 'setlocal statusline=[zdict]\ '. l:word
     execute "silent r !zdict '". a:word ."'"
 endfunction " }}}
