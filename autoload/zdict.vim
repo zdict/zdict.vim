@@ -82,13 +82,16 @@ function! s:normalize_color_code () " {{{
 
     " Optimization
     " remove empty color string
-    silent! %s/\v\[..;\[;//g
+    silent! %s/\v[⣐⣑⣒⣓⣔⣕⣖⣗⣀⣁⣂⣃⣄⣅⣆⣇]⣗//g
 
-    " remove redundent closing color code
-    silent! %s/\v\[;([^]*)\[;/[;\1/g
+    " remove redundent color code
+    silent! %s/\v([⣐⣑⣒⣓⣔⣕⣖⣗⣀⣁⣂⣃⣄⣅⣆⣇])([^⣐⣑⣒⣓⣔⣕⣖⣗⣀⣁⣂⣃⣄⣅⣆⣇]*)\1/\1\2/g
 
     " remove useless closing color code on line start
-    silent! %s/\v^([^]*)\[;/\1/g
+    silent! %s/\v^([^⣐⣑⣒⣓⣔⣕⣖⣗⣀⣁⣂⣃⣄⣅⣆⣇]*)⣗/\1/g
+
+    " compress color code
+    silent! %s/\v[⣐⣑⣒⣓⣔⣕⣖⣗⣀⣁⣂⣃⣄⣅⣆⣇]([⣐⣑⣒⣓⣔⣕⣖⣗⣀⣁⣂⣃⣄⣅⣆⣇])/\1/g
 endfunction " }}}
 
 function! s:destroy_window () " {{{
