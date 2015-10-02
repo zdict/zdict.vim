@@ -1,6 +1,6 @@
-=========
-zdict.vim
-=========
+=============================
+zdict.vim |version| |license|
+=============================
 
 The goal of zdict.vim is to integrated with zdict_ - an online dictionary framework written in Python.
 
@@ -63,3 +63,9 @@ Tested with vim 7.4.729
 
 ..  _zdict: https://github.com/zdict/zdict
 ..  _Vundle: https://github.com/VundleVim/Vundle.vim
+
+..  |version| image:: https://img.shields.io/badge/version-0.1.0-green.svg
+    :target: https://github.com/zdict/zdict.vim
+
+..  |license| image:: https://img.shields.io/badge/license-WTFPL-blue.svg
+    :target: https://github.com/zdict/zdict.vim/blob/master/LICENSE.txt
