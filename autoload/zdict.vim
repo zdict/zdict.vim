@@ -1,3 +1,4 @@
+let s:VERSION = '0.2.0'
 let s:last_queried_word = ''
 
 function! s:get_word () " {{{
@@ -138,15 +139,25 @@ function! zdict#query_visual () range
 endfunction
 
 function! s:show_configuration ()
-    call setline(1, ' zdict Configurations')
-    call setline(2, ' '. repeat('=', winwidth(0) - 2))
-    call setline(3, ' Available dictionaries:')
-    call setline(4, ' (*) Yahoo Dictionary')
-    call setline(5, ' ( ) 萌典')
-    call setline(6, ' ( ) Urban Dictionary')
-    call setline(7, ' '. repeat('=', winwidth(0) - 2))
-    call setline(8, ' These settings are temporary')
-    call setline(9, ' Put them in your vimrc to make it permanent')
+    execute 'setlocal statusline=zdict\ Configurations'
+    let l:zdict_version = system('zdict --version')
+    let l:zdict_version = substitute(l:zdict_version, '\v[^mh]*[mh]', '', '')
+    let l:zdict_version = substitute(l:zdict_version, '\v[\n\r\t]', '', '')
+    let l:seperate_line = ' '. repeat('=', winwidth(0) - 2)
+    call setline(1,  ' '. l:zdict_version .' Configurations')
+    call setline(2,  l:seperate_line)
+    call setline(3,  ' Available dictionaries:')
+    call setline(4,  ' (*) Yahoo Dictionary')
+    call setline(5,  ' ( ) 萌典')
+    call setline(6,  ' ( ) Urban Dictionary')
+    call setline(7,  '')
+    call setline(8,  ' j, k, up, down: select dictionary')
+    call setline(9,  ' Enter: close this window')
+    call setline(10, l:seperate_line)
+    call setline(11, ' These settings are temporary')
+    call setline(12, ' Put them in your vimrc to make it permanent')
+    call setline(13, l:seperate_line)
+    call setline(14, ' zdict.vim-'. s:VERSION)
 endfunction
 
 function! zdict#configuration ()
