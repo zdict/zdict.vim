@@ -51,7 +51,7 @@ The version number of zdict.vim looks like this: ``<major>.<minor>.<patch>``
 
 For a user who installed zdict.vim,
 
-* Major version number changed: Public interface may changed, check change log before upgrade
+* Major version number changed: Public interface or default configurations may changed, check change log before upgrade
 * Minor version number changed: New feature added, and old feature should still work
 * Patch version number changed: Just upgrade, some bugs is fixed
 
@@ -64,7 +64,7 @@ Tested with vim 7.4.729
 ..  _zdict: https://github.com/zdict/zdict
 ..  _Vundle: https://github.com/VundleVim/Vundle.vim
 
-..  |version| image:: https://img.shields.io/badge/version-0.1.0-green.svg
+..  |version| image:: https://img.shields.io/badge/version-0.2.0-green.svg
     :target: https://github.com/zdict/zdict.vim
 
 ..  |license| image:: https://img.shields.io/badge/license-WTFPL-blue.svg

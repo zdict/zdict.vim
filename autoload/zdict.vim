@@ -28,18 +28,20 @@ function! s:get_zdict_window_id () " {{{
     return 0
 endfunction " }}}
 
-function! s:initialize_window () " {{{
+function! s:initialize_window (window_type) " {{{
     let l:winnr = s:get_zdict_window_id()
     if l:winnr == 0
         vnew
+        set modifiable
         let w:id = 'zdict'
     else
         execute 'silent '. l:winnr .'wincmd w'
+        set modifiable
         silent 1,$delete _
     endif
     execute "silent normal! \<C-w>L"
     vertical resize 50
-    setlocal ft=zdict
+    execute 'setlocal ft='. a:window_type
 endfunction " }}}
 
 function! s:query (word) " {{{
@@ -53,6 +55,10 @@ endfunction " }}}
 function! s:post_query () " {{{
     call s:normalize_color_code()
     silent 1,1delete _
+endfunction " }}}
+
+function! s:return_to_user () " {{{
+    set nomodifiable
     execute "normal! \<C-w>\<C-w>"
 endfunction " }}}
 
@@ -116,9 +122,10 @@ function! zdict#query ()
     let l:word = s:get_word()
     if s:get_zdict_window_id() == 0 || l:word !=? s:last_queried_word
         echo 'Querying ...'
-        call s:initialize_window()
+        call s:initialize_window('zdict')
         call s:query(l:word)
         call s:post_query()
+        call s:return_to_user()
     else
         call zdict#close_zdict_window()
     endif
@@ -128,4 +135,22 @@ endfunction
 function! zdict#query_visual () range
     normal! gv
     call zdict#query()
+endfunction
+
+function! s:show_configuration ()
+    call setline(1, ' zdict Configurations')
+    call setline(2, ' '. repeat('=', winwidth(0) - 2))
+    call setline(3, ' Available dictionaries:')
+    call setline(4, ' (*) Yahoo Dictionary')
+    call setline(5, ' ( ) 萌典')
+    call setline(6, ' ( ) Urban Dictionary')
+    call setline(7, ' '. repeat('=', winwidth(0) - 2))
+    call setline(8, ' These settings are temporary')
+    call setline(9, ' Put them in your vimrc to make it permanent')
+endfunction
+
+function! zdict#configuration ()
+    call s:initialize_window('zdict-config')
+    call s:show_configuration()
+    " set nomodifiable
 endfunction
