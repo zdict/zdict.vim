@@ -19,7 +19,7 @@ function! s:add_dict (dict, title) " {{{
 endfunction " }}}
 function! s:get_dict_title (dict) " {{{
     if has_key(s:_dict_info, a:dict)
-        return s:_dict_info[a:dict][1]
+        return s:_dict_info[a:dict][1] .' ('. a:dict .')'
     endif
     return '('. a:dict .')'
 endfunction " }}}
