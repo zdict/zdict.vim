@@ -10,6 +10,10 @@ if !exists('g:zdict_configuration_key') || type(g:zdict_configuration_key) != ty
     let g:zdict_configuration_key = '<leader>Z'
 endif
 
+if !exists('g:zdict_default_dict') || type(g:zdict_default_dict) != type('')
+    let g:zdict_default_dict = 'yahoo'
+endif
+
 execute 'nnoremap <silent> '. g:zdict_query_key .' :call zdict#query()<CR>'
 execute 'vnoremap <silent> '. g:zdict_query_key .' :call zdict#query_visual()<CR>'
 

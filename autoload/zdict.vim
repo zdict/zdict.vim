@@ -1,6 +1,13 @@
 let s:VERSION = '0.2.0'
 let s:last_queried_word = ''
 
+let s:supported_dictionaries = ['yahoo', 'urban', 'moe']
+let s:dictionary_title = {}
+let s:dictionary_title['yahoo'] = 'Yahoo Dictionary'
+let s:dictionary_title['urban'] = 'Urban Dictionary'
+let s:dictionary_title['moe'] = '萌典'
+let s:dict_item_line_offset = 0
+
 function! s:get_word () " {{{
     let l:row = line('.')
     let l:col = col('.')
@@ -147,17 +154,20 @@ function! s:show_configuration ()
     call setline(1,  ' '. l:zdict_version .' Configurations')
     call setline(2,  l:seperate_line)
     call setline(3,  ' Available dictionaries:')
-    call setline(4,  ' (*) Yahoo Dictionary')
-    call setline(5,  ' ( ) 萌典')
-    call setline(6,  ' ( ) Urban Dictionary')
-    call setline(7,  '')
-    call setline(8,  ' j, k, up, down: select dictionary')
-    call setline(9,  ' Enter: close this window')
-    call setline(10, l:seperate_line)
-    call setline(11, ' These settings are temporary')
-    call setline(12, ' Put them in your vimrc to make it permanent')
-    call setline(13, l:seperate_line)
-    call setline(14, ' zdict.vim-'. s:VERSION)
+    let s:dict_item_line_offset = 4
+    let l:offset = s:dict_item_line_offset
+    for dict in s:supported_dictionaries
+        call setline(l:offset, ' ( ) '. s:dictionary_title[dict])
+        let l:offset = l:offset + 1
+    endfor
+    call setline(l:offset + 0, '')
+    call setline(l:offset + 1, ' j, k, up, down: select dictionary')
+    call setline(l:offset + 2, ' Enter: close this window')
+    call setline(l:offset + 3, l:seperate_line)
+    call setline(l:offset + 4, ' These settings are temporary')
+    call setline(l:offset + 5, ' Put them in your vimrc to make it permanent')
+    call setline(l:offset + 6, l:seperate_line)
+    call setline(l:offset + 7, ' zdict.vim-'. s:VERSION)
 endfunction
 
 function! zdict#configuration ()
