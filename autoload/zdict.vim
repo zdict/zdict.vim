@@ -1,4 +1,8 @@
 let s:VERSION = '0.2.0'
+let s:STATE_NONE = 0
+let s:STATE_QUERY = 1
+let s:STATE_CONFIG = 2
+let s:status = s:STATE_NONE
 let s:last_queried_word = ''
 
 let s:_supported_dicts = []
@@ -160,8 +164,9 @@ function! zdict#query () " {{{
         return
     endif
     let l:word = s:get_word()
-    if s:get_zdict_window_id() == 0 || l:word !=? s:last_queried_word
+    if s:get_zdict_window_id() == 0 || s:status != s:STATE_QUERY || l:word !=? s:last_queried_word
         echo 'Querying ...'
+        let s:status = s:STATE_QUERY
         call s:initialize_window('zdict')
         call s:query(l:word)
         call s:post_query()
@@ -213,10 +218,15 @@ function! s:configuration_select_dict (dict) " {{{
 endfunction " }}}
 
 function! zdict#configuration () " {{{
-    call s:initialize_window('zdict-config')
-    call s:configuration_show()
-    call s:configuration_select_dict(g:zdict_default_dict)
-    set nomodifiable
+    if s:get_zdict_window_id() == 0 || s:status != s:STATE_CONFIG
+        let s:status = s:STATE_CONFIG
+        call s:initialize_window('zdict-config')
+        call s:configuration_show()
+        call s:configuration_select_dict(g:zdict_default_dict)
+        set nomodifiable
+    else
+        call zdict#close_zdict_window()
+    endif
 endfunction " }}}
 
 function! zdict#select_last_dictionary () " {{{
