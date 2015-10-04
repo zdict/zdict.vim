@@ -27,6 +27,26 @@ zdict.vim comes with some configurable key mappings:
   - Press ``<leader><leader>z`` in normal mode to close zdict window
   - You can also query same word/sentence again to the same thing
 
+* Set default dictionary
+
+  ..  code-block:: vim
+
+      let g:zdict_default_dict = 'yahoo'
+
+  - zdict have multiple dictionary backend, currently these are available
+
+    + ``yahoo``: Yahoo Dictionary
+    + ``urban``: Urban Dictionary
+    + ``moe``: 萌典
+
+* Open Configurations Window
+
+  ..  code-block:: vim
+
+      let g:zdict_configuration_key = '<leader>Z'
+
+  - Change configurations on the fly, but remember to set them in your vimrc if you like them
+
 
 Installation
 ------------
