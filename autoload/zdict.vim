@@ -1,12 +1,45 @@
 let s:VERSION = '0.2.0'
 let s:last_queried_word = ''
 
-let s:supported_dictionaries = ['yahoo', 'urban', 'moe']
-let s:dictionary_title = {}
-let s:dictionary_title['yahoo'] = 'Yahoo Dictionary'
-let s:dictionary_title['urban'] = 'Urban Dictionary'
-let s:dictionary_title['moe'] = '萌典'
-let s:dict_item_line_offset = 0
+let s:_supported_dicts = []
+let s:_dict_info = {}
+let s:dict_line_offset = 0
+
+function! s:add_dict (dict, title) " {{{
+    if has_key(s:_dict_info, a:dict)
+        return
+    endif
+    let l:index = len(s:_supported_dicts)
+    let s:_supported_dicts = s:_supported_dicts + [a:dict]
+    let s:_dict_info[a:dict] = [l:index, a:title]
+endfunction " }}}
+function! s:get_dict_title (dict) " {{{
+    if has_key(s:_dict_info, a:dict)
+        return s:_dict_info[a:dict][1]
+    endif
+    return '('. a:dict .')'
+endfunction " }}}
+function! s:get_dict_number (dict) " {{{
+    if has_key(s:_dict_info, a:dict)
+        return s:_dict_info[a:dict][0]
+    endif
+    return 0
+endfunction " }}}
+function! s:get_dict_list () " {{{
+    return s:_supported_dicts
+endfunction " }}}
+function! s:get_last_dict (dict) " {{{
+    let l:dict_number = (s:get_dict_number(g:zdict_default_dict) - 1) % len(s:_supported_dicts)
+    return s:_supported_dicts[l:dict_number]
+endfunction " }}}
+function! s:get_next_dict (dict) " {{{
+    let l:dict_number = (s:get_dict_number(g:zdict_default_dict) + 1) % len(s:_supported_dicts)
+    return s:_supported_dicts[l:dict_number]
+endfunction " }}}
+
+call s:add_dict('yahoo', 'Yahoo Dictionary')
+call s:add_dict('urban', 'Urban Dictionary')
+call s:add_dict('moe', '萌典')
 
 function! s:get_word () " {{{
     let l:row = line('.')
@@ -40,13 +73,12 @@ function! s:initialize_window (window_type) " {{{
     let l:winnr = s:get_zdict_window_id()
     if l:winnr == 0
         vnew
-        set modifiable
         let w:id = 'zdict'
     else
         execute 'silent '. l:winnr .'wincmd w'
-        set modifiable
-        silent 1,$delete _
     endif
+    set modifiable
+    silent 1,$delete _
     execute "silent normal! \<C-w>L"
     vertical resize 50
     execute 'setlocal ft='. a:window_type
@@ -57,7 +89,7 @@ function! s:query (word) " {{{
     let l:trimed_word = substitute(l:trimed_word, '\v[\n\r]', ' ', 'g')
     let l:statsline_word = substitute(l:trimed_word, '\v[ \n\r]', '\\ ', 'g')
     execute 'setlocal statusline=[zdict]\ '. l:statsline_word
-    execute "silent r !zdict '". l:trimed_word ."'"
+    execute "silent r !zdict --dict ". g:zdict_default_dict ." '". l:trimed_word ."'"
 endfunction " }}}
 
 function! s:post_query () " {{{
@@ -121,7 +153,7 @@ function! zdict#close_zdict_window () " {{{
     redraw!
 endfunction " }}}
 
-function! zdict#query ()
+function! zdict#query () " {{{
     if !executable('zdict')
         echo 'zdict is not installed, please install it first!'
         echo 'Please refer to https://github.com/M157q/zdict.git'
@@ -138,14 +170,14 @@ function! zdict#query ()
         call zdict#close_zdict_window()
     endif
     let s:last_queried_word = l:word
-endfunction
+endfunction " }}}
 
-function! zdict#query_visual () range
+function! zdict#query_visual () range " {{{
     normal! gv
     call zdict#query()
-endfunction
+endfunction " }}}
 
-function! s:show_configuration ()
+function! s:configuration_show () " {{{
     execute 'setlocal statusline=zdict\ Configurations'
     let l:zdict_version = system('zdict --version')
     let l:zdict_version = substitute(l:zdict_version, '\v[^mh]*[mh]', '', '')
@@ -154,10 +186,10 @@ function! s:show_configuration ()
     call setline(1,  ' '. l:zdict_version .' Configurations')
     call setline(2,  l:seperate_line)
     call setline(3,  ' Available dictionaries:')
-    let s:dict_item_line_offset = 4
-    let l:offset = s:dict_item_line_offset
-    for dict in s:supported_dictionaries
-        call setline(l:offset, ' ( ) '. s:dictionary_title[dict])
+    let s:dict_line_offset = 4
+    let l:offset = s:dict_line_offset
+    for dict in s:get_dict_list()
+        call setline(l:offset, ' ( ) '. s:get_dict_title(dict))
         let l:offset = l:offset + 1
     endfor
     call setline(l:offset + 0, '')
@@ -168,10 +200,31 @@ function! s:show_configuration ()
     call setline(l:offset + 5, ' Put them in your vimrc to make it permanent')
     call setline(l:offset + 6, l:seperate_line)
     call setline(l:offset + 7, ' zdict.vim-'. s:VERSION)
-endfunction
+endfunction " }}}
 
-function! zdict#configuration ()
+function! s:configuration_select_dict (dict) " {{{
+    set modifiable
+    let l:dict_line_number = s:get_dict_number(g:zdict_default_dict) + s:dict_line_offset
+    call setline(l:dict_line_number, ' ( ) '. s:get_dict_title(g:zdict_default_dict))
+    let g:zdict_default_dict = a:dict
+    let l:dict_line_number = s:get_dict_number(a:dict) + s:dict_line_offset
+    call setline(l:dict_line_number, ' (*) '. s:get_dict_title(a:dict))
+    call cursor(l:dict_line_number, 3)
+endfunction " }}}
+
+function! zdict#configuration () " {{{
     call s:initialize_window('zdict-config')
-    call s:show_configuration()
-    " set nomodifiable
-endfunction
+    call s:configuration_show()
+    call s:configuration_select_dict(g:zdict_default_dict)
+    set nomodifiable
+endfunction " }}}
+
+function! zdict#select_last_dictionary () " {{{
+    call s:configuration_select_dict(s:get_last_dict(g:zdict_default_dict))
+    set nomodifiable
+endfunction " }}}
+
+function! zdict#select_next_dictionary () " {{{
+    call s:configuration_select_dict(s:get_next_dict(g:zdict_default_dict))
+    set nomodifiable
+endfunction " }}}

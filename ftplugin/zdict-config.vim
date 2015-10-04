@@ -6,6 +6,10 @@ setlocal conceallevel=3
 setlocal concealcursor=nic
 setlocal cc=
 
+nnoremap <buffer> <silent> j :call zdict#select_next_dictionary()<CR>
+nnoremap <buffer> <silent> k :call zdict#select_last_dictionary()<CR>
+nnoremap <buffer> <silent> <CR> :call zdict#close_zdict_window()<CR>
+
 autocmd BufEnter * :call s:check_if_only_zdict_window()
 
 function! s:check_if_only_zdict_window ()
