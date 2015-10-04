@@ -75,12 +75,12 @@ endfunction " }}}
 
 function! s:initialize_window (window_type) " {{{
     let l:winnr = s:get_zdict_window_id()
-    if l:winnr == 0
-        vnew
-        let w:id = 'zdict'
-    else
+    if l:winnr != 0
         execute 'silent '. l:winnr .'wincmd w'
+        q
     endif
+    vnew
+    let w:id = 'zdict'
     set modifiable
     silent 1,$delete _
     execute "silent normal! \<C-w>L"
