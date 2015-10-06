@@ -44,6 +44,7 @@ endfunction " }}}
 call s:add_dict('yahoo', 'Yahoo Dictionary')
 call s:add_dict('urban', 'Urban Dictionary')
 call s:add_dict('moe', '萌典')
+call s:add_dict('all', '全部')
 
 function! s:get_word () " {{{
     let l:row = line('.')
