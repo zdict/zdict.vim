@@ -27,6 +27,35 @@ zdict.vim comes with some configurable key mappings:
   - Press ``<leader><leader>z`` in normal mode to close zdict window
   - You can also query same word/sentence again to the same thing
 
+* Open Configurations Window
+
+  ..  code-block:: vim
+
+      let g:zdict_configuration_key = '<leader>Z'
+
+  - Change configurations on the fly, but remember to set them in your vimrc if you like them
+
+* Set default dictionary
+
+  ..  code-block:: vim
+
+      let g:zdict_default_dict = 'yahoo'
+
+  - zdict have multiple dictionary backends, currently these are available
+
+    + ``yahoo``: Yahoo Dictionary
+    + ``urban``: Urban Dictionary
+    + ``moe``: 萌典
+    + ``all``: query all backends
+
+* Set Maximum zdict Window Size
+
+  ..  code-block:: vim
+
+      let g:zdict_max_window_width = 50
+
+  - zdict.vim tries to get as more space as possible, and tries to leave 79 characters for user
+
 
 Installation
 ------------
@@ -51,7 +80,7 @@ The version number of zdict.vim looks like this: ``<major>.<minor>.<patch>``
 
 For a user who installed zdict.vim,
 
-* Major version number changed: Public interface may changed, check change log before upgrade
+* Major version number changed: Public interface or default configurations may changed, check change log before upgrade
 * Minor version number changed: New feature added, and old feature should still work
 * Patch version number changed: Just upgrade, some bugs is fixed
 
@@ -64,7 +93,7 @@ Tested with vim 7.4.729
 ..  _zdict: https://github.com/zdict/zdict
 ..  _Vundle: https://github.com/VundleVim/Vundle.vim
 
-..  |version| image:: https://img.shields.io/badge/version-0.1.0-green.svg
+..  |version| image:: https://img.shields.io/badge/version-0.2.0-green.svg
     :target: https://github.com/zdict/zdict.vim
 
 ..  |license| image:: https://img.shields.io/badge/license-WTFPL-blue.svg
