@@ -54,7 +54,7 @@ zdict.vim comes with some configurable key mappings:
 
       let g:zdict_max_window_width = 50
 
-    + zdict.vim tries to get as more space as possible, and tries to remain 79 characters for user
+  - zdict.vim tries to get as more space as possible, and tries to remain 79 characters for user
 
 
 Installation
