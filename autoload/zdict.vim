@@ -74,6 +74,10 @@ function! s:get_zdict_window_id () " {{{
     return 0
 endfunction " }}}
 
+function! s:get_max_zdict_window_width () " {{{
+    return min([&columns - &numberwidth - 80, g:zdict_max_window_width])
+endfunction " }}}
+
 function! s:initialize_window (window_type) " {{{
     let l:winnr = s:get_zdict_window_id()
     if l:winnr != 0
@@ -85,7 +89,7 @@ function! s:initialize_window (window_type) " {{{
     set modifiable
     silent 1,$delete _
     execute "silent normal! \<C-w>L"
-    vertical resize 50
+    execute 'vertical resize '. s:get_max_zdict_window_width()
     execute 'setlocal ft='. a:window_type
 endfunction " }}}
 
