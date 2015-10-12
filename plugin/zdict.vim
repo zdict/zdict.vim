@@ -1,3 +1,4 @@
+" default key mappings
 if !exists('g:zdict_query_key') || type(g:zdict_query_key) != type('')
     let g:zdict_query_key = '<leader>z'
 endif
@@ -8,6 +9,17 @@ endif
 
 if !exists('g:zdict_configuration_key') || type(g:zdict_configuration_key) != type('')
     let g:zdict_configuration_key = '<leader>Z'
+endif
+
+" check if zdict executable, if not, stop loading this plugin
+if !executable('zdict')
+    function! ZdictNotInstalled ()
+        echo 'zdict is not installed, please install it first!'
+        echo 'Please refer to https://github.com/M157q/zdict.git'
+    endfunction
+    execute 'nnoremap <silent> '. g:zdict_query_key .' :call ZdictNotInstalled()<CR>'
+    execute 'vnoremap <silent> '. g:zdict_query_key .' :call ZdictNotInstalled()<CR>'
+    finish
 endif
 
 if !exists('g:zdict_default_dict') || type(g:zdict_default_dict) != type('')

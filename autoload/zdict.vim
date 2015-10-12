@@ -1,4 +1,9 @@
-let s:VERSION = '0.2.0'
+" check if zdict executable, if not, stop loading this plugin
+if !executable('zdict')
+    finish
+endif
+
+let s:VERSION = '0.3.0'
 let s:STATE_NONE = 0
 let s:STATE_QUERY = 1
 let s:STATE_CONFIG = 2
@@ -41,9 +46,11 @@ function! s:get_next_dict (dict) " {{{
     return s:_supported_dicts[l:dict_number]
 endfunction " }}}
 
-call s:add_dict('yahoo', 'Yahoo Dictionary')
-call s:add_dict('urban', 'Urban Dictionary')
-call s:add_dict('moe', '萌典')
+let s:zdict_list = system('zdict --list-dicts')
+for s:line in split(s:zdict_list, '\n')
+    let s:tokens = split(s:line, ': ')
+    call s:add_dict(s:tokens[0], s:tokens[1])
+endfor
 call s:add_dict('all', '全部')
 
 function! s:get_word () " {{{
@@ -97,7 +104,7 @@ function! s:query (word) " {{{
     let l:trimed_word = substitute(a:word, '\v[ \n\r]*$', '', '')
     let l:trimed_word = substitute(l:trimed_word, '\v[\n\r]', ' ', 'g')
     let l:statsline_word = substitute(l:trimed_word, '\v[ \n\r]', '\\ ', 'g')
-    execute 'setlocal statusline=[zdict]\ '. l:statsline_word
+    execute 'setlocal statusline=[zdict]['. g:zdict_default_dict .']\ '. l:statsline_word
     execute "silent r !zdict --dict ". g:zdict_default_dict ." '". l:trimed_word ."'"
 endfunction " }}}
 
@@ -163,11 +170,6 @@ function! zdict#close_zdict_window () " {{{
 endfunction " }}}
 
 function! zdict#query () " {{{
-    if !executable('zdict')
-        echo 'zdict is not installed, please install it first!'
-        echo 'Please refer to https://github.com/M157q/zdict.git'
-        return
-    endif
     let l:word = s:get_word()
     if s:get_zdict_window_id() == 0 || s:status != s:STATE_QUERY || l:word !=? s:last_queried_word
         echo 'Querying ...'
