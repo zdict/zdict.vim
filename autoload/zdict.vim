@@ -3,7 +3,7 @@ if !executable('zdict')
     finish
 endif
 
-let s:VERSION = '0.3.0'
+let s:VERSION = '0.3.1'
 let s:STATE_NONE = 0
 let s:STATE_QUERY = 1
 let s:STATE_CONFIG = 2
@@ -105,7 +105,7 @@ function! s:query (word) " {{{
     let l:trimed_word = substitute(l:trimed_word, '\v[\n\r]', ' ', 'g')
     let l:statsline_word = substitute(l:trimed_word, '\v[ \n\r]', '\\ ', 'g')
     execute 'setlocal statusline=[zdict]['. g:zdict_default_dict .']\ '. l:statsline_word
-    execute "silent r !zdict --dict ". g:zdict_default_dict ." '". l:trimed_word ."'"
+    execute "silent r !zdict --dict ". g:zdict_default_dict ." --force-color '". l:trimed_word ."'"
 endfunction " }}}
 
 function! s:post_query () " {{{
