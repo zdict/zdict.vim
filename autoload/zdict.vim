@@ -3,7 +3,7 @@ if !executable('zdict')
     finish
 endif
 
-let s:VERSION = '0.3.1'
+let s:VERSION = '0.3.2'
 let s:STATE_NONE = 0
 let s:STATE_QUERY = 1
 let s:STATE_CONFIG = 2
@@ -82,7 +82,11 @@ function! s:get_zdict_window_id () " {{{
 endfunction " }}}
 
 function! s:get_max_zdict_window_width () " {{{
-    return min([&columns - &numberwidth - 80, g:zdict_max_window_width])
+    return max(
+        \[
+            \min([&columns - &numberwidth - 80, g:zdict_max_window_width]),
+            \g:zdict_min_window_width
+        \])
 endfunction " }}}
 
 function! s:initialize_window (window_type) " {{{

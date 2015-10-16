@@ -56,6 +56,14 @@ zdict.vim comes with some configurable key mappings:
 
   - zdict.vim tries to get as more space as possible, and tries to leave 79 characters for user
 
+* Set Minimum zdict Window Size
+
+  ..  code-block:: vim
+
+      let g:zdict_max_window_width = 30
+
+  - To prevent zdict window too thin, zdict.vim has to keep some spaces
+
 
 Installation
 ------------
@@ -93,7 +101,7 @@ Tested with vim 7.4.729
 ..  _zdict: https://github.com/zdict/zdict
 ..  _Vundle: https://github.com/VundleVim/Vundle.vim
 
-..  |version| image:: https://img.shields.io/badge/version-0.3.1-green.svg
+..  |version| image:: https://img.shields.io/badge/version-0.3.2-green.svg
     :target: https://github.com/zdict/zdict.vim
 
 ..  |license| image:: https://img.shields.io/badge/license-WTFPL-blue.svg

@@ -26,6 +26,10 @@ if !exists('g:zdict_default_dict') || type(g:zdict_default_dict) != type('')
     let g:zdict_default_dict = 'yahoo'
 endif
 
+if !exists('g:zdict_min_window_width') || type(g:zdict_min_window_width) != type('')
+    let g:zdict_min_window_width = 30
+endif
+
 if !exists('g:zdict_max_window_width') || type(g:zdict_max_window_width) != type('')
     let g:zdict_max_window_width = 50
 endif
