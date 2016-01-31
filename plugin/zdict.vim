@@ -14,8 +14,8 @@ endif
 " check if zdict executable, if not, stop loading this plugin
 if !executable('zdict')
     function! ZdictNotInstalled ()
-        echo 'zdict is not installed, please install it first!'
-        echo 'Please refer to https://github.com/M157q/zdict.git'
+        echo 'zdict is not installed, please install it first.'
+        echo 'See https://github.com/zdict/zdict.git'
     endfunction
     execute 'nnoremap <silent> '. g:zdict_query_key .' :call ZdictNotInstalled()<CR>'
     execute 'vnoremap <silent> '. g:zdict_query_key .' :call ZdictNotInstalled()<CR>'
