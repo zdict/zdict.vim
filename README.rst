@@ -1,13 +1,11 @@
 =============================
 zdict.vim |version| |license|
 =============================
-
 The goal of zdict.vim is to integrated with zdict_ - an online dictionary framework written in Python.
 
 
 Usage
 -----
-
 zdict.vim comes with some configurable key mappings:
 
 * Query
@@ -67,7 +65,6 @@ zdict.vim comes with some configurable key mappings:
 
 Installation
 ------------
-
 1.  Install zdict_
 
 2.  Install zdict.vim with Vundle_
@@ -83,7 +80,6 @@ Installation
 
 Versions
 --------
-
 The version number of zdict.vim looks like this: ``<major>.<minor>.<patch>``
 
 For a user who installed zdict.vim,
@@ -92,10 +88,11 @@ For a user who installed zdict.vim,
 * Minor version number changed: New feature added, and old feature should still work
 * Patch version number changed: Just upgrade, some bugs is fixed
 
+Note: Vim completion is added in zdict.vim 0.3.4, which needs zdict newer than ``8e8c07a``.
+
 
 Environment
 -----------
-
 Tested with vim 7.4.729
 
 ..  _zdict: https://github.com/zdict/zdict

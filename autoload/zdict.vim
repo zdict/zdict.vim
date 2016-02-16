@@ -3,7 +3,7 @@ if !executable('zdict')
     finish
 endif
 
-let s:VERSION = '0.3.2'
+let s:VERSION = '0.3.4'
 let s:STATE_NONE = 0
 let s:STATE_QUERY = 1
 let s:STATE_CONFIG = 2
@@ -54,21 +54,31 @@ endfor
 call s:add_dict('all', '全部')
 
 function! s:get_word () " {{{
-    let l:row = line('.')
-    let l:col = col('.')
     let l:mode = mode()
 
-    let l:old_z_reg = @z
     if l:mode == 'n'
-        silent normal! "zyiw
+        return expand('<cWORD>')
     elseif l:mode == 'v' || l:mode == 'V' || l:mode == ""
-        silent normal! "zy
+        if line("'<") != line("'>")
+            return ''
+        endif
+        return getline('.')[(col("'<") - 1):(col("'>") - 1)]
+    elseif l:mode == 'i'
+        let l:linetext = getline('.')
+        let l:right = col('.') - 1
+        let l:left = l:right
+        while l:left > 1
+            if l:linetext[(l:left - 1)] ==# ' '
+                let l:left = l:left + 1
+                break
+            endif
+            let l:left = l:left - 1
+            echom l:linetext[(l:left - 1):(l:right - 1)]
+        endwhile
+        return l:linetext[(l:left - 1):(l:right - 1)]
     endif
-    let l:word = @z
-    let @z = l:old_z_reg
 
-    call cursor(l:row, l:col)
-    return l:word
+    return expand('<cWORD>')
 endfunction " }}}
 
 function! s:get_zdict_window_id () " {{{
@@ -248,4 +258,18 @@ endfunction " }}}
 function! zdict#select_next_dictionary () " {{{
     call s:configuration_select_dict(s:get_next_dict(g:zdict_default_dict))
     set nomodifiable
+endfunction " }}}
+
+function! s:dump_word_starts_from (prefix) " {{{
+    let l:raw_words = system('zdict --dump "^'. a:prefix .'.*$"')
+    echom 'zdict --dump "^'. a:prefix .'"'
+    return split(l:raw_words)
+endfunction " }}}
+
+function! zdict#complete (findstart, base) " {{{
+    if a:findstart == 1
+        return col('.') - strlen(s:get_word()) - 1
+    else
+        return s:dump_word_starts_from(a:base)
+    endif
 endfunction " }}}
