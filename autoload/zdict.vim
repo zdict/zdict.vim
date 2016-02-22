@@ -3,7 +3,7 @@ if !executable('zdict')
     finish
 endif
 
-let s:VERSION = '0.3.4'
+let s:VERSION = '0.4.0'
 let s:STATE_NONE = 0
 let s:STATE_QUERY = 1
 let s:STATE_CONFIG = 2

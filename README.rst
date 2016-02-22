@@ -98,7 +98,7 @@ Tested with vim 7.4.729
 ..  _zdict: https://github.com/zdict/zdict
 ..  _Vundle: https://github.com/VundleVim/Vundle.vim
 
-..  |version| image:: https://img.shields.io/badge/version-0.3.3-green.svg
+..  |version| image:: https://img.shields.io/badge/version-0.4.0-green.svg
     :target: https://github.com/zdict/zdict.vim
 
 ..  |license| image:: https://img.shields.io/badge/license-WTFPL-blue.svg
