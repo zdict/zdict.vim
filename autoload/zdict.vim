@@ -49,7 +49,9 @@ endfunction " }}}
 let s:zdict_list = system('zdict --list-dicts')
 for s:line in split(s:zdict_list, '\n')
     let s:tokens = split(s:line, ': ')
-    call s:add_dict(s:tokens[0], s:tokens[1])
+    if len(s:tokens) == 2
+        call s:add_dict(s:tokens[0], s:tokens[1])
+    endif
 endfor
 call s:add_dict('all', '全部')
 
